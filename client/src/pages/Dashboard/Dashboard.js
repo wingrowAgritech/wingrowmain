@@ -1,7 +1,3 @@
-import "swiper/css";
-import "swiper/css/effect-fade";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 import './Dashboard.css'
 import Location from '../Dashboard/Location'
 import CardTravelIcon from '@material-ui/icons/CardTravel';
