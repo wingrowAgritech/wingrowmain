@@ -114,7 +114,7 @@ router.post('/outward',async(req,res)=>{
 
 
     if(process.env.NODE_ENV == "production"){
-        app.use(express.static('front/build'))
+        app.use(express.static('client/build'))
     }
 
     const PORT = process.env.PORT || 4000;
