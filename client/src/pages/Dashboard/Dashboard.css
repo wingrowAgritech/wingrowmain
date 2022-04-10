@@ -329,6 +329,7 @@
       width:80% ;
       height: 80%;
   }
+
     .info{
       margin: 1rem;
       width: 100vw;
@@ -344,21 +345,20 @@
     .location{
       flex-direction: column;
       justify-content: center;
-      height: 12rem;
+      height: 14rem;
       width: 8rem;
     }
     .grid_countinfo{
       justify-content: flex-start;
-      align-items: flex-start;
+      align-items: center;
     }
 }
 
 
 .heading_tertiary{
-  margin: .5rem;
   padding: .5rem;
   display: inline-block;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-family: 'Times New Roman', Times, serif;
   background-image: linear-gradient(to right , rgb(75, 255, 51),rgb(35, 129, 11));
   color: transparent;
@@ -377,6 +377,7 @@
   margin: 2rem 4rem; 
   font-size: 1.1rem;
   text-align: justify;
+  hyphens: auto;
 }
  
 .p_secondary{

@@ -41,21 +41,21 @@ function Dashboard() {
       </h1>
       <div className="grid_countinfo">
           <CountUp className="count" start={0} end={1200} duration={2.75}/>
-          <p>Farmers</p>
+          <p style={{textAlign:"center"}}>Farmers</p>
       </div>
       <div className="grid_countinfo" >
           <CountUp className="count" start={0} end={12} duration={2.75}/>
-          <p>Farmers Market</p>
+          <p style={{textAlign:"center"}}>Farmers Market</p>
       </div>
       <div className="grid_countinfo">
           <CountUp className="count" start={0} end={11000} duration={2.75}/>
-          <p>Consumers Served</p>
+          <p style={{textAlign:"center"}}>Consumers Served</p>
       </div>
     </div>
 
 
     <div className="info">
-      <div style={{textAlign:"center",margin:"2rem 0"}}>
+      <div style={{textAlign:"center",margin:"4rem 0"}}>
       <h1 className='heading_tertiary'>Our Response to Covid 19</h1>
       <div>
         <p className='p_primary'>

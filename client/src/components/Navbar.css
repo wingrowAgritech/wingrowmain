@@ -16,6 +16,7 @@
   .navbar-logo {
     background-image: linear-gradient(to bottom right,rgba(0, 0, 0, 0.74) , rgb(0, 255, 0));
     color: transparent;
+    -webkit-background-clip: text;
     background-clip: text;
     display: inline-block;
     text-decoration: none;
