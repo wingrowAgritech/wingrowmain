@@ -1,10 +1,8 @@
-import React,{useContext } from 'react';
+import React,{useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -12,9 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-// import Feed from '../pages/Farmers/Feed'
 import { useNavigate } from 'react-router-dom';
-import ShopContext from '../context/shop-context';
 
 
 function Copyright(props) {
@@ -33,15 +29,48 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Register() {
-  const context = useContext(ShopContext);
-  const {user , setUser} = context
+  const [User, setUser] = useState({
+    fname:"",
+    lname:"",
+    email:"",
+    phone:"",
+    password:""
+  })
+
   
   const navigate = useNavigate()
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    navigate('../otp')
+    try {
+      if(User.fname&&User.lname&&User.phone&&User.password&&User.email)
+      {const res = await fetch("https://wingrowmain.herokuapp.com/register" , {
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body: JSON.stringify({
+              fname:User.fname,
+              lname:User.lname,
+              email:User.email,
+              phone:User.phone,
+              password:User.password
+          })
+        });
+        const data = await res.json()
+        if(data){
+          alert("registered succesfully")
+          navigate('../')
+        }else{
+          alert("registration failed")
+        }
+      }
+    } catch (error) {
+      alert("registration failed")
+      console.log(error)
+    }
   }
+
   const handleRegister = (e)=>{
     const {name , value} = e.target
     setUser(prevState => ({
@@ -57,7 +86,7 @@ export default function Register() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 4,
+            marginTop: 10,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -76,12 +105,12 @@ export default function Register() {
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
-                  value={user.firstName}
+                  name="fname"
+                  value={User.fName}
                   onChange={handleRegister}
                   required
                   fullWidth
-                  id="firstName"
+                  id="fname"
                   label="First Name"
                   autoFocus
                 />
@@ -90,11 +119,11 @@ export default function Register() {
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
-                  value={user.lastName}
+                  id="lname"
+                  value={User.lname}
                   onChange={handleRegister}
                   label="Last Name"
-                  name="lastName"
+                  name="lname"
                   autoComplete="family-name"
                 />
               </Grid>
@@ -105,7 +134,7 @@ export default function Register() {
                   id="email"
                   label="Email Address"
                   name="email"
-                  value={user.email}
+                  value={User.email}
                   onChange={handleRegister}
                   autoComplete="email"
                 />
@@ -115,7 +144,7 @@ export default function Register() {
                   required
                   fullWidth
                   name="password"
-                  value={user.password}
+                  value={User.password}
                   onChange={handleRegister}
                   label="Password"
                   type="password"
@@ -130,22 +159,17 @@ export default function Register() {
                   fullWidth
                   name="phone"
                   label="Phone Number"
-                  value={user.phone}
+                  value={User.phone}
                   onChange={handleRegister}
                   type="phonenumber"
                   id="phonenumber"
                   autoComplete="phonenumber"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
             </Grid>
             <Button
               type="submit"
+              onClick={handleSubmit}
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}

@@ -7,8 +7,11 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 const Inward = require('./models/Inward')
 const Outward = require('./models/Outward')
+const User = require('./models/User')
 const router = express.Router()
-const cors = require('cors')
+const cors = require('cors');
+const bcrypt = require('bcryptjs/dist/bcrypt');
+
 
 app.use(cors());
 app.use('/', router);
@@ -27,6 +30,72 @@ router.get('/inward' , async(req,res)=>{
 router.get('/outward' , async(req,res)=>{
     const outwardData = await Outward.find()
     res.send(outwardData)
+})
+
+
+//register route
+                                                               
+router.post('/register' , async(req,res)=>{
+    
+    const { fname , lname , email , password , phone } = req.body;
+
+    if(!fname || !lname || !email || !password || !phone){
+        return res.status(422).json({error:"please fill the fields properly"})
+    }
+
+    try {
+        const userExist = await User.findOne({email:email})
+
+        if(userExist){
+            return res.status(422).json({error:"email already exists"})
+        }
+
+        const user = new User({fname , lname , email , password , phone})
+        
+        await user.save();
+        res.status(201).json({message:"user registered succesfully"})
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+//login route
+
+router.post('/signin', async(req,res)=>{
+    console.log(req.body)
+    try {
+        const { phone , password} = req.body
+        if(!phone || !password){
+            return res.status(400).json({error:"data invalid"})
+        }
+
+        const userLogin = await User.findOne({phone:phone});
+
+        if(userLogin){
+            const isMatch = await bcrypt.compare(password , userLogin.password)
+
+            const token = await userLogin.generateAuthToken()
+            console.log(token)
+
+            res.cookie("jwtoken",token,{
+                expires:new Date(Date.now()+2589200000),
+                httpOnly:true
+            });
+
+
+            if(!isMatch){
+                return res.status(400).json({error:"invalid Credentials"})
+            }else{
+                res.json({message:"signin successful"})
+            }
+            
+        }else{
+            return res.status(400).json({error:"invalid Credentials"})
+        }
+        
+    } catch (error) {
+        console.log(error)    
+    }
 })
 
 

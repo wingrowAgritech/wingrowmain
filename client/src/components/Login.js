@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React , {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+
 
 function Copyright(props) {
   return (
@@ -29,23 +31,58 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  const navigate = useNavigate()
+  const [UserLogin, setUserLogin] = useState({
+    phone:"",
+    password:""
+  })
 
+  const handleLogin= (e)=>{
+    const {name , value} = e.target
+    setUserLogin(prevState => ({
+      ...prevState,
+      [name]: value
+  }))
+}
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  try {
+    if(UserLogin.phone&&UserLogin.password)
+    {const res = await fetch("https://wingrowmain.herokuapp.com/signin" , {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+            phone:UserLogin.phone,
+            password:UserLogin.password
+        })
+      });
+      const data = await res.json()
+      if(data){
+        alert("Login succesfully")
+        navigate('../farmershome')
+      }else{
+        alert("Login failed")
+      }
+    }
+  } catch (error) {
+    alert("Login failed")
+    console.log(error)
+  }
+}
+
+
+
+  console.log(UserLogin)
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 4,
+            marginTop: 10,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -62,18 +99,23 @@ export default function Login() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
+              id="phone"
+              label="Phone Number"
+              name="phone"
+              value={UserLogin.phone}
               autoComplete="email"
+              onChange={handleLogin}
               autoFocus
+              type="number"
             />
             <TextField
               margin="normal"
               required
               fullWidth
               name="password"
+              onChange={handleLogin}
               label="Password"
+              value={UserLogin.passworc}
               type="password"
               id="password"
               autoComplete="current-password"

@@ -28,11 +28,11 @@ export default function FarmersHome() {
           Select type
         </Typography>
         <Stack direction="row" spacing={5}>
-            <Link to={"./inward"}>
+            <Link to={"../inward"}>
                 Inward
             </Link>
                 <br/>
-            <Link to={"./outward"}>
+            <Link to={"../outward"}>
                 Outward
              </Link>
         </Stack>
